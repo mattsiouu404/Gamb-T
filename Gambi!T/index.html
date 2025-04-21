@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gamb¡T</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+        
+        #intro {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 10;
+            cursor: pointer;
+        }
+        
+        #intro img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        #main-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: url("https://i.pinimg.com/736x/53/48/48/53484882d0e1b052c263d19c4c575b3b.jpg") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            z-index: 1;
+        }
+        
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: white;
+            text-shadow: 0 0 10px black;
+            z-index: 3;
+        }
+        
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 3;
+        }
+        
+        .footer-icon {
+            width: 30px;
+            height: 30px;
+            filter: invert(1);
+            transition: transform 0.3s;
+        }
+        
+        .footer-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 5px black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="intro">
+        <img src="https://i.pinimg.com/originals/53/b5/12/53b512d2242bc5f945d1cbf06fe7521d.gif" alt="Sonic GIF" />
+        <p>Click to Join the Site</p>
+    </div>
+
+    <div id="main-content">
+        <canvas id="snow-canvas"></canvas>
+        <div class="center-text">Gamb¡T</div>
+        <footer>
+            <a href="https://www.instagram.com/chani___ysf" target="_blank">
+                <img class="footer-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+            </a>
+            <div class="logo">Gamb¡T</div>
+            <a href="https://discord.com/users/784768487725596693" target="_blank">
+                <img class="footer-icon" src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord">
+            </a>
+        </footer>
+        <audio id="bg-music" autoplay loop>
+            <source src="music.mp3" type="audio/mpeg">
+          </audio>
+    </div>
+
+    <script>
+        const intro = document.getElementById('intro');
+        const main = document.getElementById('main-content');
+
+        intro.addEventListener('click', () => {
+            intro.style.display = 'none';
+            main.style.display = 'block';
+        });
+
+        // Snow Effect
+        const canvas = document.getElementById("snow-canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let snowflakes = [];
+
+        function createSnowflakes() {
+            for (let i = 0; i < 100; i++) {
+                snowflakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 4 + 1,
+                    d: Math.random() * 1
+                });
+            }
+        }
+
+        function drawSnowflakes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            for (let i = 0; i < 100; i++) {
+                let f = snowflakes[i];
+                ctx.moveTo(f.x, f.y);
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+            }
+            ctx.fill();
+            moveSnowflakes();
+        }
+
+        let angle = 0;
+
+        function moveSnowflakes() {
+            angle += 0.01;
+            for (let i = 0; i < 100; i++) {
+                let f = snowflakes[i];
+                f.y += Math.pow(f.d, 2) + 1;
+                f.x += Math.sin(angle) * 2;
+
+                if (f.y > canvas.height) {
+                    snowflakes[i] = {
+                        x: Math.random() * canvas.width,
+                        y: 0,
+                        r: f.r,
+                        d: f.d
+                    };
+                }
+            }
+        }
+
+        createSnowflakes();
+        setInterval(drawSnowflakes, 33);
+    </script>
+</body>
+
+</html>
+<script src="scripts.js"></script>
